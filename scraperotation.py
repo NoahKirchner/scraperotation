@@ -5,13 +5,12 @@ import base64
 
 class Rotator:
     proxy_source    = None
-    raw_proxy_list  = None
-    safe_proxy_list = None
+    proxy_list = None
 
 
     def __init__(self):
-        self.proxy_source = "http://free-proxy.cz/en/proxylist/country/all/all/ping/level1{}"
-        self._clean_proxies(self.return_raw_proxies(1))
+        self.proxy_source   = "http://free-proxy.cz/en/proxylist/country/all/all/ping/level1{}"
+        self.proxy_list     =   self._clean_dict(self._clean_proxies(self.return_raw_proxies(5)))
 
     def return_raw_proxies(self, pages:int=1):
         encode_regex    = re.compile(r'".+"')
@@ -59,17 +58,25 @@ class Rotator:
             if len(item) != 11:
                 out_list.remove(item)
 
-
-
-
-
-
-
-
-
-        print(out_list)
         return out_list
 
+    def _clean_dict(self, in_list:list):
+        out_list = list()
+        for item in in_list:
+            new_entry = dict()
+            new_entry['ip']         =   item[0]     #IP Addr
+            new_entry['port']       =   item[1]     #Port
+            new_entry['protocol']   =   item[2]     #Protocol (SOCKS, HTTP, etc)
+            new_entry['country']    =   item[3]     #Country
+            new_entry['region']     =   item[4]     #Region of country
+            new_entry['city']       =   item[5]     #City in country
+            new_entry['level']      =   item[6]     #Level of protection
+            new_entry['speed']      =   item[7]     #Speed of proxy
+            new_entry['uptime']     =   item[8]     #Approximate percentage uptime
+            new_entry['response']   =   item[9]     #Response speed from http request made
+            out_list.append(new_entry)
+
+        return out_list
 
 
 
