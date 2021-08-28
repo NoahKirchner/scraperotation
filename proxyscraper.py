@@ -154,4 +154,3 @@ class ProxyScraper:
 
         return output_list
 
-Test = ProxyScraper()
